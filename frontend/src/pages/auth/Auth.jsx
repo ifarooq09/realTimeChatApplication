@@ -3,12 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { apiService } from "@/lib/apiService";
+import { userAppStore } from "@/store";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Auth = () => {
+  const navigate = useNavigate();
+  const { setUserInfo } = userAppStore
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,7 +63,15 @@ const Auth = () => {
         }
       )
 
-      console.log({ response })
+      if (response.data.user.id) {
+        setUserInfo(response.data.user)
+        if (response.data.user.profileSetup) {
+          navigate("/chat")
+        } else {
+          navigate("/profile")
+        }
+      }
+
     } 
   };
 
@@ -79,6 +91,11 @@ const Auth = () => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      
+      if (response === 201) {
+        setUserInfo(response.data.user)
+        navigate("/profile")
+      }
     }
   };
 
@@ -96,7 +113,7 @@ const Auth = () => {
               </p>
             </div>
             <div className="flex items-center justify-center w-full">
-              <Tabs className="w-3/4">
+              <Tabs className="w-3/4" defaultValue="login">
                 <TabsList className="bg-transparent rounded-none w-full flex justify-between">
                   <TabsTrigger
                     value="login"
