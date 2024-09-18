@@ -107,7 +107,33 @@ const login = async (req, res, next) => {
     }
 }
 
+const getUserInfo = async (req, res) => {
+    try {
+        const userData = await User.findById(req.userId)
+        if (!userData) {
+            throw new NotFoundError('User with the given id not found.')
+        }
+
+        res.status(StatusCodes.CREATED).json({
+
+            id: userData._id,
+            email: userData.email,
+            profileSetup: userData.profileSetup,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            image: userData.image,
+            color: userData.color
+
+        })
+
+    } catch (error) {
+        console.log({ error })
+        return res.status(500).send("Internal Server Error")
+    }
+}
+
 module.exports = {
     signup,
-    login
+    login,
+    getUserInfo
 }
