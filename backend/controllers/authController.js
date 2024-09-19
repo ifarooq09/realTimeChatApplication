@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/userModel.js')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnauthenticatedError, NotFoundError } = require('../errors')
+const { renameSync, unlinkSync } = require('fs')
 
 const signup = async (req, res, next) => {
     try {
@@ -132,8 +133,103 @@ const getUserInfo = async (req, res) => {
     }
 }
 
+const updateProfile = async (req, res, next) => {
+    try {
+        const { userId } = req
+        const { firstName, lastName, color } = req.body
+
+        if (!firstName || !lastName) {
+            throw new NotFoundError('Please fill all the required fields')
+        }
+
+        const userData = await User.findByIdAndUpdate(
+            userId,
+            {
+                firstName,
+                lastName,
+                color,
+                profileSetup: true,
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        )
+
+        return res.status(StatusCodes.CREATED).json({
+
+            id: userData._id,
+            email: userData.email,
+            profileSetup: userData.profileSetup,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            image: userData.image,
+            color: userData.color
+
+        })
+    } catch (error) {
+        console.log({ error })
+        return res.status(500).send("Internal Server Error")
+    }
+}
+
+const addProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            throw new NotFoundError('File not found.')
+        }
+
+        const date = Date.now();
+        let fileName = "uploads/profiles/" + date + req.file.originalname
+        renameSync(req.file.path, fileName)
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.userId,
+            {
+                image: fileName
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        )
+        return res.status(StatusCodes.CREATED).json({
+            image: updatedUser.image
+        })
+    } catch (error) {
+        console.log({ error })
+        return res.status(500).send("Internal Server Error")
+    }
+}
+
+const removeProfileImage = async (req, res) => {
+    try {
+        const { userId } = req
+        const user = await User.findById( userId )
+
+        if (!user) {
+            throw new NotFoundError('User not found.')
+        }
+
+        if (user.image) {
+            unlinkSync(user.image)
+        }
+
+        user.image = null
+        await user.save();
+
+        return res.status(StatusCodes.CREATED).json({ msg: "Profile image removed successfully."})
+    } catch (error) {
+        console.log({ error })
+        return res.status(500).send("Internal Server Error")
+    }
+}
+
 module.exports = {
     signup,
     login,
-    getUserInfo
+    getUserInfo,
+    updateProfile,
+    addProfileImage,
+    removeProfileImage
 }
