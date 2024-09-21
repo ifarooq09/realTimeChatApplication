@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const { setUserInfo } = userAppStore
+  const { setUserInfo } = userAppStore()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

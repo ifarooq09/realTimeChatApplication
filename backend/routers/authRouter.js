@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { signup, login, getUserInfo, updateProfile, addProfileImage, removeProfileImage } = require('../controllers/authController.js')
+const { signup, login, getUserInfo, updateProfile, addProfileImage, removeProfileImage, logout } = require('../controllers/authController.js')
 
 const authMiddleware = require('../middleware/authMiddleware.js')
 
@@ -17,5 +17,6 @@ router.route('/userInfo').get(authMiddleware, getUserInfo)
 router.route('/updateProfile').post(authMiddleware, updateProfile)
 router.route('/addProfileImage').post(authMiddleware, upload.single("profileImage"), addProfileImage)
 router.route('/removeProfileImage').delete(authMiddleware, removeProfileImage)
+router.route('/logout').post(logout)
 
 module.exports = router;

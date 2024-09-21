@@ -205,7 +205,7 @@ const addProfileImage = async (req, res) => {
 const removeProfileImage = async (req, res) => {
     try {
         const { userId } = req
-        const user = await User.findById( userId )
+        const user = await User.findById(userId)
 
         if (!user) {
             throw new NotFoundError('User not found.')
@@ -218,7 +218,23 @@ const removeProfileImage = async (req, res) => {
         user.image = null
         await user.save();
 
-        return res.status(StatusCodes.CREATED).json({ msg: "Profile image removed successfully."})
+        return res.status(StatusCodes.CREATED).json({ msg: "Profile image removed successfully." })
+    } catch (error) {
+        console.log({ error })
+        return res.status(500).send("Internal Server Error")
+    }
+}
+
+const logout = async (req, res) => {
+    try {
+        res.cookie("jwt", "", {
+            maxAge: 1,
+            secure: true,
+            sameSite: "None"
+        })
+
+        return res.status(StatusCodes.CREATED).json({ msg: "Logout Successfully." })
+
     } catch (error) {
         console.log({ error })
         return res.status(500).send("Internal Server Error")
@@ -231,5 +247,6 @@ module.exports = {
     getUserInfo,
     updateProfile,
     addProfileImage,
-    removeProfileImage
+    removeProfileImage,
+    logout
 }
