@@ -1,3 +1,4 @@
+import NewIm from "./new-im/NewIm";
 import ProfileInfo from "./profile-info/profileInfo";
 
 /* eslint-disable react/prop-types */
@@ -10,6 +11,7 @@ const ContactsContainer = () => {
       <div className="my-5">
         <div className="flex items-center justify-between pr-10">
           <Title text="Instant Messages" />
+          <NewIm />
         </div>
       </div>
       <div className="my-5">
