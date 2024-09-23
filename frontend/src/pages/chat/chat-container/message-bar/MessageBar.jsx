@@ -31,16 +31,17 @@ const MessageBar = () => {
   };
 
   const handleSendMessage = async () => {
-    if (selectedChatType === "connect") {
-      socket.emit("sendMessage", {
-        sender: userInfo.id,
-        content: message,
-        recipient: selectedChatData._id,
-        messageType: "text",
-        fileUrl: undefined
-      })
+    if (selectedChatType === "contact") {
+        socket.emit("sendMessage", {
+            sender: userInfo.id,
+            content: message,
+            recipient: selectedChatData._id,
+            messageType: "text",
+            fileUrl: undefined
+        });
     }
-  };
+ };
+ 
 
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 mg-6 gap-6">

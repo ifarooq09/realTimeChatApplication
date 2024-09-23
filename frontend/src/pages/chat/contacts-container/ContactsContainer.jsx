@@ -1,8 +1,29 @@
+import { useEffect } from "react";
 import NewIm from "./new-im/NewIm";
 import ProfileInfo from "./profile-info/profileInfo";
+import { apiService } from "@/lib/apiService";
+import { GET_CONTACTS_FOR_IM_LIST } from "@/utils/constants";
+import { userAppStore } from "@/store";
+import ContactList from "@/components/ui/ContactList";
 
 /* eslint-disable react/prop-types */
 const ContactsContainer = () => {
+  const { instantMessagesContacts, setInstantMessagesContacts } =
+    userAppStore();
+
+  useEffect(() => {
+    const getContacts = async () => {
+      const response = await apiService.get(GET_CONTACTS_FOR_IM_LIST, {
+        withCredentials: true,
+      });
+
+      if (response.data.contacts) {
+        setInstantMessagesContacts(response.data.contacts);
+      }
+    };
+
+    getContacts();
+  }, []);
   return (
     <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
       <div className="pt-16">
@@ -12,6 +33,9 @@ const ContactsContainer = () => {
         <div className="flex items-center justify-between pr-10">
           <Title text="Instant Messages" />
           <NewIm />
+        </div>
+        <div className="max-h-[38vh] overflow-auto scrollbar-hidden">
+          <ContactList contacts={instantMessagesContacts} />
         </div>
       </div>
       <div className="my-5">

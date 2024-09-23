@@ -9,6 +9,7 @@ const notFound = require('../backend/middleware/notFound.js')
 
 const authRouter = require('../backend/routers/authRouter.js')
 const contactRouter = require('../backend/routers/contactRouter.js')
+const messagesRouter = require('../backend/routers/messagesRouter.js')
 
 // middleware
 app.use(express.json())
@@ -38,6 +39,7 @@ const corsOptions = {
 //routes
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/contacts', contactRouter )
+app.use('/api/v1/messages', messagesRouter)
 
 app.use(errorHandlerMiddleware)
 app.use(notFound)

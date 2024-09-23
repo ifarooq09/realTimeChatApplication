@@ -27,15 +27,15 @@ export const SocketProvider = ({ children }) => {
       });
 
       const handleRecieveMessage = (message) => {
+        console.log("Message received on client: ", message); // Add this log
         const { selectedChatData, selectedChatType, addMessage } =
-          userAppStore();
+          userAppStore.getState();
 
         if (
           selectedChatType !== undefined &&
           (selectedChatData._id === message.sender._id ||
             selectedChatData._id === message.recipient._id)
         ) {
-            console.log("Message Recieved: ", message)
           addMessage(message);
         }
       };

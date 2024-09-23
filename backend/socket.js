@@ -1,4 +1,3 @@
-const { disconnect } = require("mongoose");
 const { Server } = require("socket.io");
 const Message = require("./models/messageModel.js");
 
@@ -24,23 +23,23 @@ const setupSocket = (server) => {
     }
 
     const sendMessage = async (message) => {
-        const senderSocketId = userSocketMap.get(message.sender)
-        const recipientSocketId = userSocketMap.get(message.recipient)
-
+        const senderSocketId = userSocketMap.get(message.sender);
+        const recipientSocketId = userSocketMap.get(message.recipient);
+     
         const createdMessage = await Message.create(message);
-
         const messageData = await Message.findById(createdMessage._id)
                             .populate("sender", "id email firstName lastName image color")
-                            .populate("recipient", "id email firstName lastName image color")
-
+                            .populate("recipient", "id email firstName lastName image color");
+     
         if (recipientSocketId) {
-            io.to(recipientSocketId).emit("recieveMessage", messageData)
+            io.to(recipientSocketId).emit("recieveMessage", messageData);
         }
-
+     
         if (senderSocketId) {
-            io.to(senderSocketId).emit("recieveMessage", messageData)
+            io.to(senderSocketId).emit("recieveMessage", messageData);
         }
-    }
+     };
+     
 
     io.on("connection", (socket) => {
         const userId = socket.handshake.query.userId;
