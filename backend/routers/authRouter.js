@@ -8,7 +8,7 @@ const authMiddleware = require('../middleware/authMiddleware.js')
 const multer = require('multer')
 
 const upload = multer({
-    dest: "uploads/profiles/"
+    dest: "uploads/profiles"
 })
 
 router.route('/signup').post(signup)

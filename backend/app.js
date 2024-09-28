@@ -24,6 +24,7 @@ const corsOptions = {
   app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
   app.use("/uploads/profiles", express.static("uploads/profiles"))
+  app.use("uploads/files", express.static("uploads/files"))
   
   app.use(cookieParser());
   

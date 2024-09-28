@@ -3,7 +3,10 @@ import { userAppStore } from "@/store";
 import { useEffect, useRef } from "react";
 import moment from "moment";
 import { apiService } from "@/lib/apiService";
-import { GET_MESSAGES_ROUTE } from "@/utils/constants";
+import { GET_MESSAGES_ROUTE, HOST } from "@/utils/constants";
+import { MdFolderZip } from "react-icons/md"
+import { IoMdArrowRoundDown } from "react-icons/io"
+
 
 const MessageContainer = () => {
   const scrollRef = useRef();
@@ -26,15 +29,15 @@ const MessageContainer = () => {
         );
 
         if (response.data.messages) {
-          setSelectedChatMessages(response.data.messages)
+          setSelectedChatMessages(response.data.messages);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
     if (selectedChatData._id) {
-      if(selectedChatType === "contact") {
-        getMessage()
+      if (selectedChatType === "contact") {
+        getMessage();
       }
     }
   }, [selectedChatType, selectedChatData, setSelectedChatMessages]);
@@ -46,6 +49,16 @@ const MessageContainer = () => {
       });
     }
   }, [selectedChatMessages]);
+
+  const checkIfImages = (filePath) => {
+    const imageRegex =
+      /\.(jpg|jpeg|png|gif|bmp|tiff|tif|webp|svg|ico|heic|heif)$/i;
+    return imageRegex.test(filePath);
+  };
+
+  const downloadFile = async (file) => {
+    console.log(file)
+  }
 
   const renderMessages = () => {
     let lastDate = null;
@@ -81,6 +94,29 @@ const MessageContainer = () => {
           } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
         >
           {message.content}
+        </div>
+      )}
+      {message.messageType === "file" && (
+        <div
+          className={`${
+            message.sender !== selectedChatData._id
+              ? "bg-yellow-500/5 text-yellow-500/90 border-yellow-500/50"
+              : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+          } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+        >
+          {checkIfImages(message.fileUrl) 
+            ? <div className="cursor-pointer">
+              <img src={`${HOST}}/${message.fileUrl}`} height={300} width={300} />
+              </div> 
+            : (
+              <div className="flex items-center justify-center gap-4">
+                <span className="text-white/8 text-3xl bg-black/20 rounded-full p-3">
+                  <MdFolderZip />
+                </span>
+                <span>{message.fileUrl.split("/").pop()}</span>
+                <span className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300" onClick={() => downloadFile(message.fileUrl)}><IoMdArrowRoundDown /></span>
+              </div>
+            )}
         </div>
       )}
       <div className="text-xs text-gray-600">

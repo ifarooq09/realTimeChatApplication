@@ -16,3 +16,4 @@ export const GET_CONTACTS_FOR_IM_LIST = `${CONTACTS_ROUTES}/getContactsForIM`
 
 export const MESSAGES_ROUTES = "/api/v1/messages"
 export const GET_MESSAGES_ROUTE = `${MESSAGES_ROUTES}/getMessages`
+export const UPLOAD_FILE_ROUTE = `${MESSAGES_ROUTES}/uploadFiles`
