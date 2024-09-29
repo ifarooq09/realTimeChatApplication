@@ -5,10 +5,11 @@ import { apiService } from "@/lib/apiService";
 import { GET_CONTACTS_FOR_IM_LIST } from "@/utils/constants";
 import { userAppStore } from "@/store";
 import ContactList from "@/components/ui/ContactList";
+import CreateChannel from "./create-channel/CreateChannel";
 
 /* eslint-disable react/prop-types */
 const ContactsContainer = () => {
-  const { instantMessagesContacts, setInstantMessagesContacts } =
+  const { instantMessagesContacts, setInstantMessagesContacts, groups } =
     userAppStore();
 
   useEffect(() => {
@@ -41,6 +42,10 @@ const ContactsContainer = () => {
       <div className="my-5">
         <div className="flex items-center justify-between pr-10">
           <Title text="Groups" />
+          <CreateChannel />
+        </div>
+        <div className="max-h-[38vh] overflow-auto scrollbar-hidden">
+          <ContactList contacts={groups} isChannel={true}/>
         </div>
       </div>
       <ProfileInfo />

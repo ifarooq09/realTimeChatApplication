@@ -35,7 +35,7 @@ const uploadFile = async (req, res) => {
             throw new NotFoundError('File is required');
         }
 
-        const date = Date.now(); // Correct way to get the current timestamp
+        const date = Date.now(); 
         let fileDir = `uploads/files/${date}`;
         let fileName = `${fileDir}/${req.file.originalname}`;
 

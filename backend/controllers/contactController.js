@@ -89,9 +89,28 @@ const getContacts = async (req, res) => {
     }
 }
 
+const getAllContacts = async (req, res) => {
+    try {
+        const users = await User.find(
+            { _id: {
+                $ne: req.userId
+            }},
+            "firstName lastName _id email"
+        )
+
+        const contacts = users.map((user) => ({
+            label: user.firstName ? `${user.firstName} ${user.lastName}` : user.email,
+            value: user._id
+        }))
+        return res.status(StatusCodes.OK).json({ contacts });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Something went wrong' });
+    }
+};
 
 
 module.exports = {
     searchContacts,
-    getContacts
+    getContacts,
+    getAllContacts
 }
