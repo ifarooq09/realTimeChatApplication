@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   TooltipProvider,
   TooltipContent,
@@ -24,7 +25,7 @@ const CreateChannel = () => {
   const { setSelectedChatType, setSelectedChatData, addGroup } = userAppStore();
   const [newGroupModal, setNewGroupModal] = useState(false);
   const [allContacts, setAllContacts] = useState([]);
-  const [selectedContacts, setSelectedContacs] = useState([]);
+  const [selectedContacts, setSelectedContacts] = useState([]);
   const [groupName, setGroupName] = useState("");
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const CreateChannel = () => {
 
             if (response.status === 201) {
                 setGroupName("");
-                setSelectedContacs([]);
+                setSelectedContacts([]);
                 setNewGroupModal(false)
                 addGroup(response.data.group)
             } 
@@ -98,7 +99,7 @@ const CreateChannel = () => {
                 defaultOptions={allContacts}
                 placeholder="Search Contacts"
                 value={selectedContacts}
-                onChange={setSelectedContacs}
+                onChange={setSelectedContacts}
                 emptyIndicator={
                     <p className="text-center text-lg leading-10 text-gray-600">No results found</p>
                 }

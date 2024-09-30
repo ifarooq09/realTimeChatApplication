@@ -2,15 +2,19 @@ import { useEffect } from "react";
 import NewIm from "./new-im/NewIm";
 import ProfileInfo from "./profile-info/profileInfo";
 import { apiService } from "@/lib/apiService";
-import { GET_CONTACTS_FOR_IM_LIST } from "@/utils/constants";
+import { GET_CONTACTS_FOR_IM_LIST, GET_USER_GROUPS } from "@/utils/constants";
 import { userAppStore } from "@/store";
 import ContactList from "@/components/ui/ContactList";
 import CreateChannel from "./create-channel/CreateChannel";
 
 /* eslint-disable react/prop-types */
 const ContactsContainer = () => {
-  const { instantMessagesContacts, setInstantMessagesContacts, groups } =
-    userAppStore();
+  const {
+    instantMessagesContacts,
+    setInstantMessagesContacts,
+    groups,
+    setGroups,
+  } = userAppStore();
 
   useEffect(() => {
     const getContacts = async () => {
@@ -23,8 +27,19 @@ const ContactsContainer = () => {
       }
     };
 
+    const getGroups = async () => {
+      const response = await apiService.get(GET_USER_GROUPS, {
+        withCredentials: true,
+      });
+
+      if (response.data.groups) {
+        setGroups(response.data.groups);
+      }
+    };
+
     getContacts();
-  }, []);
+    getGroups();
+  }, [setInstantMessagesContacts, setGroups]);
   return (
     <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
       <div className="pt-16">
@@ -45,7 +60,7 @@ const ContactsContainer = () => {
           <CreateChannel />
         </div>
         <div className="max-h-[38vh] overflow-auto scrollbar-hidden">
-          <ContactList contacts={groups} isChannel={true}/>
+          <ContactList contacts={groups} isChannel={true} />
         </div>
       </div>
       <ProfileInfo />

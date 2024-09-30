@@ -28,8 +28,12 @@ export const SocketProvider = ({ children }) => {
 
       const handleRecieveMessage = (message) => {
         console.log("Message received on client: ", message); // Add this log
-        const { selectedChatData, selectedChatType, addMessage } =
-          userAppStore.getState();
+        const {
+          selectedChatData,
+          selectedChatType,
+          addMessage,
+          addContactsInIMContacts,
+        } = userAppStore.getState();
 
         if (
           selectedChatType !== undefined &&
@@ -38,9 +42,28 @@ export const SocketProvider = ({ children }) => {
         ) {
           addMessage(message);
         }
+        addContactsInIMContacts(message);
+      };
+
+      const handleReceiveGroupMessage = (message) => {
+        const {
+          selectedChatData,
+          selectedChatType,
+          addMessage,
+          addGroupInGroupList,
+        } = userAppStore.getState();
+
+        if (
+          selectedChatType !== undefined &&
+          selectedChatData._id === message.groupId
+        ) {
+          addMessage(message);
+        }
+        addGroupInGroupList(message);
       };
 
       socket.current.on("recieveMessage", handleRecieveMessage);
+      socket.current.on("receiveGroupMessage", handleReceiveGroupMessage);
 
       return () => {
         socket.current.disconnect();

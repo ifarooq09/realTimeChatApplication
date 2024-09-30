@@ -9,7 +9,6 @@ export const ADD_PROFILE_IMAGE_ROUTE = `${AUTH_ROUTES}/addProfileImage`
 export const REMOVE_PROFILE_IMAGE_ROUTE = `${AUTH_ROUTES}/removeProfileImage`
 export const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`
 
-
 export const CONTACTS_ROUTES = "/api/v1/contacts"
 export const SEARCH_CONTACTS_ROUTE = `${CONTACTS_ROUTES}/search`
 export const GET_CONTACTS_FOR_IM_LIST = `${CONTACTS_ROUTES}/getContactsForIM`
@@ -21,3 +20,5 @@ export const UPLOAD_FILE_ROUTE = `${MESSAGES_ROUTES}/uploadFiles`
 
 export const GROUPS_ROUTES = "/api/v1/groups"
 export const CREATE_GROUP_ROUTES = `${GROUPS_ROUTES}/createGroup`
+export const GET_USER_GROUPS = `${GROUPS_ROUTES}/getUserGroups`
+export const GET_GROUP_MESSAGES = `${GROUPS_ROUTES}/getGroupMessages`
