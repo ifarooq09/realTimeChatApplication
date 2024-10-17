@@ -26,6 +26,7 @@ This project is a Node.js-based API for user authentication, contact management,
 - MongoDB instance running (local or cloud).
 - Postman or any API testing tool for testing routes.
 - Any terminal for running commands.
+- React.js installed on your machine
 
 ### Installation
 
